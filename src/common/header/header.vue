@@ -32,7 +32,7 @@
       </div>
     </div>
     <div class="header-bottom">
-      <div class="header-bottom-data" v-for="(item,index) in headerArr">
+      <div class="header-bottom-data fl" v-for="(item,index) in headerArr" ref="headerDiv">
         <p class="header-bottom-data-top"><span>{{item.number}}</span><span>{{item.load}}</span></p>
         <p class="header-bottom-data-center">{{item.name}}</p>
       </div>
@@ -80,10 +80,10 @@
 
 
 
+
       }
     },
-
-
+    
     //获取天气预报的接口
     getWeatherForecasts(){
       axios.get('https://www.tianqiapi.com/api/?version=v1&cityid=101270801')
@@ -179,7 +179,7 @@
         .then((res) => {
           if(res.data.state==="1"){
             if(res.data.data.length>0){
-              this.headerArr=res.data.data
+              this.headerArr=res.data.data;
             }
             else {
               this.$message.warning( "暂无数据");
@@ -266,8 +266,8 @@
       height: 65px;
       display: flex;
       .header-bottom-data{
-        color: @color-white;
         flex: 1;
+        color: @color-white;
         display: flex;
         flex-direction: column;
         align-items: center;
@@ -278,13 +278,13 @@
 
           }
           span:last-child {
-           font-size: @font-size-small-ss;
+           font-size: @font-size-small;
             margin-left: 5%;
           }
         }
         .header-bottom-data-center{
           margin-top: 5px;
-          font-size: @font-size-small-s;
+          font-size: @font-size-small;
         }
       }
     }

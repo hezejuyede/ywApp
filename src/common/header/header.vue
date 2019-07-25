@@ -83,7 +83,7 @@
 
       }
     },
-    
+
     //获取天气预报的接口
     getWeatherForecasts(){
       axios.get('https://www.tianqiapi.com/api/?version=v1&cityid=101270801')

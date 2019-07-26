@@ -5,7 +5,6 @@
       <div class="navBar-div" v-for="(item,index) in navBar" @click="changeNavBar(index)" :class="{'navColor':index === num}">
         {{item.jz}}
       </div>
-
     </div>
     <div class="ElectricityManagement-center">
       <div class="ElectricityManagement-center-div1">
@@ -105,9 +104,14 @@
   @import "../../assets/less/base";
 
   .ElectricityManagement {
+    position: absolute;
     max-width: 640px;
     width: 100%;
-    margin: 0 auto;
+    margin: auto;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    right: 0;
     background-color: @color-F0;
     .ElectricityManagement-navBar {
       height: 50px;

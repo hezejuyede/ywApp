@@ -96,6 +96,8 @@
   import Back from '../../common/back/back'
   import Loading from '../../common/loading/loading';
   import {getNowTime} from '../../assets/js/api'
+  import axios from 'axios'
+  import URL  from '../../assets/js/URL'
 
 
   export default {
@@ -106,16 +108,11 @@
         dateValue: '',
         img:'',
         tableHeight:"",
-        navBar:[{jz:"全部"},{jz:"#1"},{jz:"#2"},{jz:"#3"},{jz:"#4"},{jz:"#5"}],
-        loadManagementData:[
-          {type:"全部",rj:"76.61%",hb:"1.82",AGC:"1411kw",ss:"1415mv"},
-          {type:"#1",rj:"76.61%",hb:"1.82",AGC:"1411kw",ss:"1415mv"},
-          {type:"#2",rj:"76.61%",hb:"1.82",AGC:"1411kw",ss:"1415mv"},
-          {type:"#3",rj:"76.61%",hb:"1.82",AGC:"1411kw",ss:"1415mv"},
-          {type:"#4",rj:"76.61%",hb:"1.82",AGC:"1411kw",ss:"1415mv"},
-          {type:"#5",rj:"76.61%",hb:"1.82",AGC:"1411kw",ss:"1415mv"},
-          {type:"#6",rj:"76.61%",hb:"1.82",AGC:"1411kw",ss:"1415mv"}
-        ],
+        navBar:[],
+        navBarId:"1",
+        equipmentId:"",
+        equipmentLine:[],
+        loadManagementData:[],
         value2:"",
         time:"",
         dateVisible:false
@@ -124,7 +121,10 @@
     },
     components: {Loading,Back},
     mounted() {
-      this.drawLine();
+      setTimeout(()=>{
+        this.getEquipmentLineData(this.navBar[0].id,this.time);
+      },1000)
+
     },
     created() {
       setTimeout(() => {
@@ -160,69 +160,126 @@
         else {
           this.time = getNowTime();
           this.setTableHeight();
+          axios.post(" "+ URL +"/app/getNumberOEquipment")
+            .then((res) => {
+              if(res.data.state==="1"){
+                if(res.data.data.length>0){
+                  this.navBar=res.data.data;
+                  this.getEquipmentTableData(this.time);
+                }
+                else {
+                  this.$message.warning( "暂无数据");
+                }
+              }
+              else {
+                this.$message.warning(res.data.message);
+              }
+            })
+            .catch((err) => {
+              console.log(err)
+            });
         }
       },
 
-      //显示曲线
-      drawLine() {
-        // 基于准备好的dom，初始化echarts实例
-        let myChart = this.$echarts.init(document.getElementById('dataBar'));
-        // 绘制图表
-        myChart.setOption({
-          title : {
-            text: '负荷',
-            subtext: '实时显示'
-          },
-          tooltip : {
-            trigger: 'axis'
-          },
-          legend: {
-            data:['昨日','今日']
-          },
-          grid:{
-            x:40,
-            borderWidth:1,
-            x2:10,
-            y2:30
-          },
-
-          toolbox: {
-            show : true,
-            feature : {
-              mark : {show: true},
-              magicType : {show: true, type: ['line', 'bar']},
-              restore : {show: true},
+      //请求有几个机组线
+      getEquipmentTableData(data1,data2){
+        axios.post(" "+ URL +"/app/getEquipmentTableData",{"id":data1,"time":data2})
+          .then((res) => {
+            if(res.data.state==="1"){
+              if(res.data.data.length>0){
+                this.loadManagementData=res.data.data;
+              }
+              else {
+                this.$message.warning( "暂无数据");
+              }
             }
-          },
-          calculable : true,
-          xAxis : [
-            {
-              type : 'category',
-              boundaryGap : false,
-              data : ['1','2','3','4','5','6','7','8','9','10','11','12','13','14','15','16','17','18','19','20','21','22','23','24']
+            else {
+              this.$message.warning(res.data.message);
             }
-          ],
-          yAxis : [
-            {
-              type : 'value'
-            }
-          ],
-          series : [
-            {
-              name:'昨日',
-              type:'line',
-              smooth:true,
-              data:[3001, 2001, 3015, 3085, 2600, 3830, 2710,3001, 2001, 3015, 3085, 2600, 3830, 2710,3001, 2001, 3015, 3085, 2600, 3830, 2710,3001, 2001,3001,],
-            },
-            {
-              name:'今日',
-              type:'line',
-              smooth:true,
-              data:[3501, 2501, 3515, 3585, 2900, 3530, 2510,3501, 2501, 3515, 3585, 2200, 3530, 2510,3501, 2501, 3515, 3585, 2500, 3530, 2510,3501, 2501,3501,],
-            }
-          ]
-        });
+          })
+          .catch((err) => {
+            console.log(err)
+          });
       },
+
+      //请求table数据
+      getEquipmentLineData(data1,data2){
+        axios.post(" "+ URL +"/app/getEquipmentLineData",{"id":data1,"time":data2})
+          .then((res) => {
+            if(res.data.state==="1"){
+              if(res.data.data.length>0){
+                // 基于准备好的dom，初始化echarts实例
+                this.equipmentLine =res.data.data;
+                let myChart = this.$echarts.init(document.getElementById('dataBar'));
+                // 绘制图表
+                myChart.setOption({
+                  title : {
+                    text: '负荷',
+                    subtext: '实时显示'
+                  },
+                  tooltip : {
+                    trigger: 'axis'
+                  },
+                  legend: {
+                    data:['昨日','今日']
+                  },
+                  grid:{
+                    x:40,
+                    borderWidth:1,
+                    x2:10,
+                    y2:30
+                  },
+
+                  toolbox: {
+                    show : true,
+                    feature : {
+                      mark : {show: true},
+                      magicType : {show: true, type: ['line', 'bar']},
+                      restore : {show: true},
+                    }
+                  },
+                  calculable : true,
+                  xAxis : [
+                    {
+                      type : 'category',
+                      boundaryGap : false,
+                      data :this.equipmentLine[0].xAxis
+                    }
+                  ],
+                  yAxis : [
+                    {
+                      type : 'value'
+                    }
+                  ],
+                  series : [
+                    {
+                      name:'昨日',
+                      type:'line',
+                      smooth:true,
+                      data:this.equipmentLine[0].todayData,
+                    },
+                    {
+                      name:'今日',
+                      type:'line',
+                      smooth:true,
+                      data:this.equipmentLine[0].yesterdayData,
+                    }
+                  ]
+                });
+              }
+              else {
+                this.$message.warning( "暂无数据");
+              }
+            }
+            else {
+              this.$message.warning(res.data.message);
+            }
+          })
+          .catch((err) => {
+            console.log(err)
+          });
+      },
+
 
       //返回上一页
       goBackPage(){
@@ -238,24 +295,171 @@
       //进行时间查询
       doSearch(){
         if (this.time) {
+          axios.post(" "+ URL +"/app/getTimeEquipmentLineData",{"id":this.navBarId,"time":this.time})
+            .then((res) => {
+              if(res.data.state==="1"){
+                if(res.data.data.length>0){
+                  this.dateVisible=false;
+                  this.equipmentLine=res.data.data;
+                  // 基于准备好的dom，初始化echarts实例
+                 this.$nextTick(() => {
+                   let myChart = this.$echarts.init(document.getElementById('dataBar'));
+                   // 绘制图表
+                   myChart.setOption({
+                     title : {
+                       text: '负荷',
+                       subtext: '实时显示'
+                     },
+                     tooltip : {
+                       trigger: 'axis'
+                     },
+                     legend: {
+                       data:[this.equipmentLine[0].date,'今日']
+                     },
+                     grid:{
+                       x:40,
+                       borderWidth:1,
+                       x2:10,
+                       y2:30
+                     },
 
+                     toolbox: {
+                       show : true,
+                       feature : {
+                         mark : {show: true},
+                         magicType : {show: true, type: ['line', 'bar']},
+                         restore : {show: true},
+                       }
+                     },
+                     calculable : true,
+                     xAxis : [
+                       {
+                         type : 'category',
+                         boundaryGap : false,
+                         data :this.equipmentLine[0].xAxis
+                       }
+                     ],
+                     yAxis : [
+                       {
+                         type : 'value'
+                       }
+                     ],
+                     series : [
+                       {
+                         name:res.data.data[0].date,
+                         type:'line',
+                         smooth:true,
+                         data:res.data.data[0].data,
+                       }
+                     ]
+                   });
+                   myChart.resize();
+                  })
+
+
+
+                }
+                else {
+                  this.$message.warning( "暂无数据");
+                }
+              }
+              else {
+                this.$message.warning(res.data.message);
+              }
+            })
+            .catch((err) => {
+              console.log(err)
+            });
         }
         else {
-          this.message = "查询时间不能为空";
-          this.HideModal = false;
-          const that = this;
-          function a() {
-            that.message = "";
-            that.HideModal = true;
-          }
-          setTimeout(a, 2000);
+          this.$message.warning( "查询时间不能为空");
         }
       },
 
       //改变头部NAV
       changeNavBar(index){
-        this.num = index;
+        this.navBarId=this.navBar[index].id;
+        axios.post(" "+ URL +"/app/getOtherEquipmentLineData",{"id":this.navBarId,"time":this.time})
+          .then((res) => {
+            if(res.data.state==="1"){
+              if(res.data.data.length>0){
+                this.num = index;
+                this.equipmentLine=res.data.data;
+                // 基于准备好的dom，初始化echarts实例
+                let myChart = this.$echarts.init(document.getElementById('dataBar'));
+
+                // 绘制图表
+                myChart.setOption({
+                  title : {
+                    text: '负荷',
+                    subtext: '实时显示'
+                  },
+                  tooltip : {
+                    trigger: 'axis'
+                  },
+                  legend: {
+                    data:['昨日','今日']
+                  },
+                  grid:{
+                    x:40,
+                    borderWidth:1,
+                    x2:10,
+                    y2:30
+                  },
+
+                  toolbox: {
+                    show : true,
+                    feature : {
+                      mark : {show: true},
+                      magicType : {show: true, type: ['line', 'bar']},
+                      restore : {show: true},
+                    }
+                  },
+                  calculable : true,
+                  xAxis : [
+                    {
+                      type : 'category',
+                      boundaryGap : false,
+                      data :this.equipmentLine[0].xAxis
+                    }
+                  ],
+                  yAxis : [
+                    {
+                      type : 'value'
+                    }
+                  ],
+                  series : [
+                    {
+                      name:'昨日',
+                      type:'line',
+                      smooth:true,
+                      data:this.equipmentLine[0].todayData,
+                    },
+                    {
+                      name:'今日',
+                      type:'line',
+                      smooth:true,
+                      data:this.equipmentLine[0].yesterdayData,
+                    }
+                  ]
+                });
+
+              }
+              else {
+                this.$message.warning( "暂无数据");
+              }
+            }
+            else {
+              this.$message.warning(res.data.message);
+            }
+          })
+          .catch((err) => {
+            console.log(err)
+          });
       }
+
+
+
     }
   }
 </script>

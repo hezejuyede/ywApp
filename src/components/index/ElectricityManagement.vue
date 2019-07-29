@@ -1,12 +1,7 @@
 <template>
   <div class="ElectricityManagement">
     <back></back>
-    <div class="ElectricityManagement-navBar">
-      <div class="navBar-div" v-for="(item,index) in navBar" @click="changeNavBar(index)" :class="{'navColor':index === num}">
-        {{item.jz}}
-      </div>
-    </div>
-    <div class="ElectricityManagement-center">
+    <div class="ElectricityManagement-center" ref="ElectricityManagementCenter">
       <div class="ElectricityManagement-center-div1">
         <div class="center-div-title">
            日电量
@@ -44,7 +39,7 @@
       </div>
       <div class="ElectricityManagement-center-div3">
         <div class="center-div-title">
-          日电量
+          年电量
         </div>
         <div class="center-div-top">
           <div class="center-div-top-left"><span>2442.22</span><span>万千瓦时</span></div>
@@ -78,12 +73,13 @@
         dateValue: '',
         num:0,
         img: '',
-        navBar:[{jz:"全厂"},{jz:"#1"},{jz:"#2"},{jz:"#3"},{jz:"#4"},{jz:"#5"},{jz:"#6"}],
       }
     },
     components: {Loading, Back},
     mounted() {
-
+      setTimeout(() => {
+        this.setTableHeight();
+      }, 1000);
     },
     created() {
       setTimeout(() => {
@@ -94,9 +90,19 @@
       getLoading() {
         this.img = ["1"]
       },
-      changeNavBar(index) {
-        this.num = index;
-      }
+      //根据屏幕设置DIV高度
+      setTableHeight() {
+        if (/Android|webOS|iPhone|iPod|BlackBerry/i.test(navigator.userAgent)) {
+          var H = window.screen.height;
+          let div = this.$refs.ElectricityManagementCenter;
+          div.style.height = H - 40+ "px";
+        }
+        else {
+          let div = this.$refs.ElectricityManagementCenter;
+          div.style.height = H - 40 + "px";
+        }
+
+      },
     }
   }
 </script>
@@ -113,27 +119,15 @@
     bottom: 0;
     right: 0;
     background-color: @color-F0;
-    .ElectricityManagement-navBar {
-      height: 50px;
-      background-color: @color-white;
-      margin-bottom: 5px;
-      display: flex;
-      .navBar-div {
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        flex: 1;
-      }
-    }
-    .navColor {
-      color: #3a8ee6;
+    .ElectricityManagement-center{
+      margin-top: 10px;
     }
     .ElectricityManagement-center-div1 {
-      height:140px;
+      height:30%;
       background-color: @color-white;
       position: relative;
       overflow:hidden;
-      margin-bottom: 10px;
+      margin-bottom: 3%;;
       .center-div-title {
         position: absolute;
         left: -20px;
@@ -212,9 +206,9 @@
         flex-direction: column;
         margin: 0 auto;
         .center-div-bottom-list{
-          height: 20px;
+          height: 30%;
+          margin-bottom: 3px;
           width: 100%;
-          margin-bottom: 5px;
           display: flex;
           align-items: center;
           span:first-child{
@@ -244,11 +238,11 @@
       }
     }
     .ElectricityManagement-center-div2 {
-      height:180px;
+      height:32%;
       background-color: @color-white;
       position: relative;
       overflow:hidden;
-      margin-bottom: 10px;
+      margin-bottom: 3%;
       .center-div-title {
         position: absolute;
         left: -20px;
@@ -327,9 +321,9 @@
         flex-direction: column;
         margin: 0 auto;
         .center-div-bottom-list{
-          height: 20px;
+          height: 30%;
+          margin-bottom: 3px;
           width: 100%;
-          margin-bottom: 5px;
           display: flex;
           align-items: center;
           span:first-child{
@@ -359,11 +353,10 @@
       }
     }
     .ElectricityManagement-center-div3 {
-      height:180px;
+      height:33%;
       background-color: @color-white;
       position: relative;
       overflow:hidden;
-      margin-bottom: 10px;
       .center-div-title {
         position: absolute;
         left: -20px;
@@ -442,9 +435,9 @@
         flex-direction: column;
         margin: 0 auto;
         .center-div-bottom-list{
-          height: 20px;
           width: 100%;
-          margin-bottom: 5px;
+          height: 30%;
+          margin-bottom: 3px;
           display: flex;
           align-items: center;
           span:first-child{
@@ -473,7 +466,6 @@
 
       }
     }
-
   }
 
 

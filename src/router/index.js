@@ -7,7 +7,15 @@ import User from '../components/user/user'
 import UserLogin from '../components/user/userLongin'
 import UserRegister from '../components/user/userRegister'
 
-import ElectricityManagement from '../components/index/ElectricityManagement'
+import ElectricityManagement from '../components/index/ElectricityManagement/ElectricityManagement'
+import annualElectricity from '../components/index/ElectricityManagement/annualElectricity'
+import monthlyElectricity from '../components/index/ElectricityManagement/monthlyElectricity.vue'
+import dailyElectricity from '../components/index/ElectricityManagement/dailyElectricity'
+
+
+
+
+
 import LoadManagement from '../components/index/LoadManagement'
 import EconomicIndicators from '../components/index/EconomicIndicators'
 import EnvironmentalProtection from '../components/index/EnvironmentalProtection'
@@ -56,6 +64,28 @@ export default new Router({
       name:'ElectricityManagement',
       component: ElectricityManagement
     },
+
+    {
+      path: '/annualElectricity',
+      name:'annualElectricity',
+      component: annualElectricity
+    },
+    {
+      path: '/monthlyElectricity',
+      name:'monthlyElectricity',
+      component: monthlyElectricity
+    },
+    {
+      path: '/dailyElectricity',
+      name:'dailyElectricity',
+      component: dailyElectricity
+    },
+
+
+
+
+
+
     {
       path: '/LoadManagement',
       name:'LoadManagement',

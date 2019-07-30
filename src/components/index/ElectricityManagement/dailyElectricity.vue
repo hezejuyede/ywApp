@@ -6,7 +6,7 @@
         <span class="fl">返回</span>
       </div>
       <div class="backCenter fl">
-        日用电量
+        日电量
       </div>
       <div class="backRight fl" @click="showChooseDate">
         <i class="iconfont icon-riqi"></i>
@@ -53,7 +53,7 @@
           <el-date-picker
             style="width: 100%"
             v-model="time"
-            type="month"
+            type="dates"
             value-format="yyyy-MM-dd"
             placeholder="查询日期">
           </el-date-picker>
@@ -68,7 +68,6 @@
 <script type="text/ecmascript-6">
   import Back from '../../../common/back/back'
   import Loading from '../../../common/loading/loading';
-  import {getNowTime} from '../../../assets/js/api'
   import axios from 'axios'
   import URL from '../../../assets/js/URL'
 
@@ -88,7 +87,7 @@
         equipmentLine: [],
         loadManagementData: [],
         value2: "",
-        time: "",
+        time: [],
         dateVisible: false
 
       }
@@ -129,7 +128,7 @@
 
         }
         else {
-          this.time = getNowTime();
+
           this.setTableHeight();
           this.getEquipmentLineData();
           this.getEquipmentTableData();
@@ -242,7 +241,7 @@
 
       //进行时间查询
       doSearch() {
-        if (this.time) {
+        if (this.time.length>0 && this.time.length<3) {
           let that = this;
           axios.all([
             axios.post(" " + URL + "/app/Electricity/dailyElectricityTableData", {"time": this.time}),
@@ -254,7 +253,7 @@
             }));
         }
         else {
-          this.$message.warning("查询时间不能为空");
+          this.$message.warning("查询时间不能为空,最多2个");
         }
       },
 

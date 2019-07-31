@@ -87,7 +87,7 @@
         equipmentLine: [],
         loadManagementData: [],
         value2: "",
-        time: [],
+        time: "",
         dateVisible: false
 
       }
@@ -236,6 +236,7 @@
       //显示选择
       showChooseDate() {
         this.dateVisible = true;
+        this.time="";
 
       },
 
@@ -247,9 +248,10 @@
             axios.post(" " + URL + "/app/Electricity/dailyElectricityTableData", {"time": this.time}),
             axios.post(" " + URL + "/app/Electricity/dailyElectricityLineData", {"time": this.time})
           ])
-            .then(axios.spread(function (line, table) {
-              that.equipmentLine = line.data;
-              that.loadManagementData = table.data;
+            .then(axios.spread(function (table,line) {
+              that.equipmentLine = line.data.data;
+              that.loadManagementData = table.data.data;
+              that.dateVisible=false;
             }));
         }
         else {

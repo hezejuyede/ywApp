@@ -93,11 +93,11 @@
   </div>
 </template>
 <script type="text/ecmascript-6">
-  import Back from '../../common/back/back'
-  import Loading from '../../common/loading/loading';
-  import {getNowTime} from '../../assets/js/api'
+  import Back from '../../../common/back/back'
+  import Loading from '../../../common/loading/loading';
+  import {getNowTime} from '../../../assets/js/api'
   import axios from 'axios'
-  import URL  from '../../assets/js/URL'
+  import URL  from '../../../assets/js/URL'
 
 
   export default {
@@ -464,7 +464,7 @@
   }
 </script>
 <style scoped lang="less" rel="stylesheet/less">
-  @import "../../assets/less/base";
+  @import "../../../assets/less/base";
   .loadManagement{
     position: absolute;
     max-width: 640px;

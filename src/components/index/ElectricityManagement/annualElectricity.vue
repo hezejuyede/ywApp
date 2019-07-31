@@ -255,6 +255,9 @@
       //显示选择
       showChooseDate() {
         this.dateVisible = true;
+        this.startYear="";
+        this.endYear="";
+
 
       },
 
@@ -266,9 +269,10 @@
             axios.post(" " + URL + "/app/Electricity/yearlyElectricityTableData", {"startYear": this.startYear,"endYear":this.endYear}),
             axios.post(" " + URL + "/app/Electricity/yearlyElectricityLineData", {"startYear": this.startYear,"endYear":this.endYear})
           ])
-            .then(axios.spread(function (line, table) {
-              that.equipmentLine = line.data;
-              that.loadManagementData = table.data;
+            .then(axios.spread(function (table,line) {
+              that.equipmentLine = line.data.data;
+              that.loadManagementData = table.data.data;
+              that.dateVisible=false;
             }));
         }
         else {

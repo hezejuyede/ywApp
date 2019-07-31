@@ -11,12 +11,14 @@ import ElectricityManagement from '../components/index/ElectricityManagement/Ele
 import annualElectricity from '../components/index/ElectricityManagement/annualElectricity'
 import monthlyElectricity from '../components/index/ElectricityManagement/monthlyElectricity.vue'
 import dailyElectricity from '../components/index/ElectricityManagement/dailyElectricity'
+import fillInDay from '../components/index/ElectricityManagement/fillInDay'
+import fillInMonth from '../components/index/ElectricityManagement/fillInMonth'
+import fillInYear from '../components/index/ElectricityManagement/fillInYear'
 
 
 
 
-
-import LoadManagement from '../components/index/LoadManagement'
+import LoadManagement from '../components/index/LoadManagement/LoadManagement'
 import EconomicIndicators from '../components/index/EconomicIndicators'
 import EnvironmentalProtection from '../components/index/EnvironmentalProtection'
 import DailyHourlyMean from '../components/index/DailyHourlyMean'
@@ -79,6 +81,21 @@ export default new Router({
       path: '/dailyElectricity',
       name:'dailyElectricity',
       component: dailyElectricity
+    },
+    {
+      path: '/fillInDay',
+      name:'fillInDay',
+      component: fillInDay
+    },
+    {
+      path: '/fillInMonth',
+      name:'fillInMonth',
+      component: fillInMonth
+    },
+    {
+      path: '/fillInYear',
+      name:'fillInYear',
+      component: fillInYear
     },
 
 

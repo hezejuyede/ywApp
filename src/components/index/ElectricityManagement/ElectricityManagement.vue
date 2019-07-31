@@ -171,13 +171,13 @@
       //根据ID显示去哪个页面
       showFillInPage(id) {
         if (id === "1") {
-          this.$router.push("/dailyElectricity")
+          this.$router.push("/fillInDay")
         }
         else if (id === "2") {
-          this.$router.push("/monthlyElectricity")
+          this.$router.push("/fillInMonth")
         }
         else if (id === "3") {
-          this.$router.push("/annualElectricity")
+          this.$router.push("/fillInYear")
         }
       },
 

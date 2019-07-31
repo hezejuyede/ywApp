@@ -34,7 +34,7 @@
       <div class="indexBottom" ref="indexBottom">
         <div class="IndexNav">
           <div class="IndexNav-one">
-            <div class="IndexNavTemplate" v-for="(item,index) in  IndexNavOne" :key="item.id">
+            <div class="IndexNavTemplate" v-for="(item,index) in  IndexNavOne" :key="item.id" @click="goToNavBar(item.url)">
               <div class="IndexNavTemplate-icon">
                 <i :class="item.icon"></i>
               </div>
@@ -101,7 +101,7 @@
         img: '',
         height:Number,
         IndexNavOne: [
-          {"icon": "iconfont icon-pulse", "text": "负荷预测"},
+          {"icon": "iconfont icon-pulse", "text": "负荷预测","url":"loadForecasting"},
           {"icon": "iconfont icon-xiaoliangyuce", "text": "调度计划"},
           {"icon": "iconfont icon-caozuorizhi", "text": "值长日志"},
           {"icon": "iconfont icon-message-channel", "text": "生产短信"}

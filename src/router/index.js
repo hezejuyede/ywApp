@@ -14,7 +14,7 @@ import dailyElectricity from '../components/index/ElectricityManagement/dailyEle
 import fillInDay from '../components/index/ElectricityManagement/fillInDay'
 import fillInMonth from '../components/index/ElectricityManagement/fillInMonth'
 import fillInYear from '../components/index/ElectricityManagement/fillInYear'
-
+import loadForecasting from '../components/index/LoadForecasting/loadForecasting'
 
 
 
@@ -97,7 +97,11 @@ export default new Router({
       name:'fillInYear',
       component: fillInYear
     },
-
+    {
+      path: '/loadForecasting',
+      name:'loadForecasting',
+      component: loadForecasting
+    },
 
 
 

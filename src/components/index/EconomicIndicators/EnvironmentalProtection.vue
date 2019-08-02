@@ -347,7 +347,6 @@
   .indicatorsDiv{
     height: 300px;
     overflow: auto;
-    background-color: #ffcd32;
     .indicatorsContent{
       width: 100%;
       border: 2px solid @color-F0;

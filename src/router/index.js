@@ -20,7 +20,7 @@ import loadForecasting from '../components/index/LoadForecasting/loadForecasting
 
 import LoadManagement from '../components/index/LoadManagement/LoadManagement'
 import EconomicIndicators from '../components/index/EconomicIndicators'
-import EnvironmentalProtection from '../components/index/EnvironmentalProtection'
+import EnvironmentalProtection from '../components/index/EconomicIndicators/EnvironmentalProtection'
 import DailyHourlyMean from '../components/index/DailyHourlyMean'
 import EarlyMeeting from '../components/index/EarlyMeeting'
 import Patrol from '../components/index/Patrol'

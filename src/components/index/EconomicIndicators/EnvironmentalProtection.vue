@@ -21,7 +21,7 @@
           fixed
           prop="zhibiao"
           align="center"
-          width="100"
+          width="120"
           label="指标">
         </el-table-column>
         <el-table-column
@@ -84,13 +84,43 @@
     <!--弹框详情 -->
     <el-dialog  title="指标添加" :visible.sync="aadVisible" width="80%">
       <div class="indicatorsDiv">
-        <div class="indicatorsContent" v-for="(item,index) in xzData" :key="item.id">
+        <div class="indicatorsContent" v-for="(item,index) in addXzData" :key="item.id">
           <div class="indicatorsContentLeft">
             {{item.text}}
           </div>
           <div class="indicatorsContentRight">
-            <el-button type="primary" icon="el-icon-plus" circle></el-button>
+            <el-button type="primary" icon="el-icon-plus" circle @click="addInToXzData(item.id)"></el-button>
           </div>
+        </div>
+      </div>
+    </el-dialog>
+
+    <!--弹框详情 -->
+    <el-dialog title="限值配置" :visible.sync="xzVisible" :fullscreen="true" :center="true">
+      <div class="xzDiv">
+        <div class="xzDivContent" ref="xzDivContent">
+          <div class="xzDivContentDiv" v-for="(item,index) in szxzData" :key="item.id">
+            <div class="xzDivContentDivTop">
+              {{item.text}}{{item.valueName}}
+            </div>
+            <div class="xzDivContentDivBottom">
+              <div class="xzDivContentDivBottomInput">
+                <div class="xzDivContentDivBottomInputLeft">上限</div>
+                <div class="xzDivContentDivBottomInputRight">
+                  <el-input v-model="item.maxValue" placeholder="上限"></el-input>
+                </div>
+              </div>
+              <div class="xzDivContentDivBottomInput">
+                <div class="xzDivContentDivBottomInputLeft">下限</div>
+                <div class="xzDivContentDivBottomInputRight">
+                  <el-input v-model="item.minValue" placeholder="下限"></el-input>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="searchBtn" ref="searchBtn">
+          <el-button type="success" @click="setXzValue">确定</el-button>
         </div>
       </div>
     </el-dialog>
@@ -109,28 +139,12 @@
         img: '',
         tableHeight:Number,
         environmentalData:[],
-        xzData:[
-          {"text":"有功负荷指令","id":"1"},
-          {"text":"有功负荷指令","id":"2"},
-          {"text":"有功负荷指令","id":"3"},
-          {"text":"有功负荷指令","id":"4"},
-          {"text":"有功负荷指令","id":"5"},
-          {"text":"有功负荷指令","id":"6"},
-          {"text":"有功负荷指令","id":"7"},
-          {"text":"有功负荷指令","id":"8"},
-          {"text":"有功负荷指令","id":"9"},
-          {"text":"有功负荷指令","id":"10"},
-          {"text":"有功负荷指令","id":"11"},
-          {"text":"有功负荷指令","id":"12"},
-          {"text":"有功负荷指令","id":"13"},
-          {"text":"有功负荷指令","id":"14"},
-          {"text":"有功负荷指令","id":"15"},
-          {"text":"有功负荷指令","id":"16"},
-          {"text":"有功负荷指令","id":"17"},
-          {"text":"有功负荷指令","id":"18"}
-        ],
+        xzData:[],
+        addXzData:[],
         dateVisible:false,
-        aadVisible:false
+        aadVisible:false,
+        xzVisible:false,
+        szxzData:[]
       }
     },
     components: {Loading, Back},
@@ -160,6 +174,7 @@
 
       },
 
+      //设置弹出框高度
       setDivHeight(){
         let equipmentDivContent = this.$refs.equipmentDivContent;
         let searchBtn = this.$refs.searchBtn;
@@ -175,10 +190,27 @@
         }
       },
 
+      //设置弹出框高度
+      setXzDivHeight(){
+        let searchBtn = this.$refs.searchBtn;
+        let xzDivContent = this.$refs.xzDivContent;
+        if (/Android|webOS|iPhone|iPod|BlackBerry/i.test(navigator.userAgent)) {
+          var H = window.screen.height;
+          xzDivContent.style.height = 0.75* H + "px";
+          searchBtn.style.height = 0.1* H + "px";
+        }
+        else {
+          var h = document.body.clientHeight;
+          xzDivContent.style.height = 0.75* h + "px";
+          searchBtn.style.height = 0.1* H + "px";
+        }
+      },
+
       //页面加载检查用户是否登陆，没有登陆就加载登陆页面
       getAdminState() {
         const userInfo = localStorage.getItem("userInfo");
         if (userInfo === null) {
+          console.log(11)
 
         }
         else {
@@ -213,33 +245,131 @@
         this.$router.go("-1")
       },
 
-      //显示选择
+      //显示添加指标选择
       showChooseDate(){
         this.dateVisible=true;
         setTimeout(()=>{
           this.setDivHeight();
-        },1000)
-
+        },1000);
+        axios.post(" " + URL + "/app/economicIndicators/showChooseDate")
+          .then((res) => {
+            if (res.data.state === "1") {
+              if (res.data.data.length > 0) {
+                this.xzData = res.data.data;
+              }
+              else {
+                this.$message.warning("暂无数据");
+              }
+            }
+            else {
+              this.$message.warning(res.data.message);
+            }
+          })
+          .catch((err) => {
+            console.log(err)
+          });
       },
-      //设置限值
-      setXz(){
 
-      },
       //删除限值
       deleteXz(id) {
-        for (let i = 0; i < this.xzData.length; i++) {
-          if (id === this.xzData[i].id) {
-            this.xzData.splice(i, 1)
-          }
-        }
-
+        axios.post(" " + URL + "/app/economicIndicators/deleteXz",{"id":id})
+          .then((res) => {
+            if (res.data.state === "1") {
+              if (res.data.data.length > 0) {
+                this.xzData = res.data.data;
+              }
+              else {
+                this.$message.warning("暂无数据");
+              }
+            }
+            else {
+              this.$message.warning(res.data.message);
+            }
+          })
+          .catch((err) => {
+            console.log(err)
+          });
       },
 
       //现在添加的详情
       showAdd(){
         this.aadVisible=true;
-
+        axios.post(" " + URL + "/app/economicIndicators/addXzData")
+          .then((res) => {
+            if (res.data.state === "1") {
+              if (res.data.data.length > 0) {
+                this.addXzData = res.data.data;
+              }
+              else {
+                this.$message.warning("暂无数据");
+              }
+            }
+            else {
+              this.$message.warning(res.data.message);
+            }
+          })
+          .catch((err) => {
+            console.log(err)
+          });
       },
+
+      addInToXzData(id){
+        axios.post(" " + URL + "/app/economicIndicators/addInToXzData",{"id":id})
+          .then((res) => {
+            if (res.data.state === "1") {
+              this.addXzData = res.data.addXzData;
+              this.xzData = res.data.xzData;
+            }
+            else {
+              this.$message.warning(res.data.message);
+            }
+          })
+          .catch((err) => {
+            console.log(err)
+          });
+      },
+
+      //显示设置限值
+      setXz(){
+        this.xzVisible=true;
+        setTimeout(()=>{
+          this.setXzDivHeight()
+        },1000);
+        axios.post(" " + URL + "/app/economicIndicators/showXzSet")
+          .then((res) => {
+            if (res.data.state === "1") {
+              if (res.data.data.length > 0) {
+                this.szxzData = res.data.data;
+              }
+              else {
+                this.$message.warning("暂无数据");
+              }
+            }
+            else {
+              this.$message.warning(res.data.message);
+            }
+          })
+          .catch((err) => {
+            console.log(err)
+          });
+      },
+
+      setXzValue(){
+        axios.post(" " + URL + "/app/economicIndicators/setXzValue",{"data":this.szxzData})
+          .then((res) => {
+            if (res.data.state === "1") {
+              this.$message.success(res.data.message);
+              this.xzVisible= false;
+            }
+            else {
+              this.$message.warning(res.data.message);
+            }
+          })
+          .catch((err) => {
+            console.log(err)
+          });
+      },
+
 
       goToDailyHourlyMean(){
         this.$router.push("/DailyHourlyMean")
@@ -370,6 +500,61 @@
 
     }
   }
+  .xzDiv{
+    .xzDivContent{
+      overflow: auto;
+      .xzDivContentDiv{
+        width: 100%;
+        border: 2px solid @color-F0;
+        background-color: @color-white;
+        .xzDivContentDivTop{
+          width: 100%;
+          height: 50px;
+          line-height: 50px;
+          padding-left: 2%;
+          border-bottom: 1px solid @color-F0;
+        }
+        .xzDivContentDivBottom{
+          .xzDivContentDivBottomInput{
+            display: flex;
+            border-bottom: 1px solid@color-F0;
+            .xzDivContentDivBottomInputLeft {
+              flex: 1;
+              display: flex;
+              align-items: center;
+              justify-content: center;
+            }
+            .xzDivContentDivBottomInputRight {
+              flex: 1.5;
+              display: flex;
+              align-items: center;
+              justify-content: center;
+            }
+
+          }
+
+        }
+
+      }
+    }
+    .searchBtn {
+      flex: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      .el-button {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 100%;
+        height: 50px;
+      }
+    }
+
+  }
+
+
+
   .loading-container {
     position: absolute;
     max-width: 640px;

@@ -107,13 +107,13 @@
           {"icon": "iconfont icon-message-channel", "text": "生产短信"}
         ],
         IndexNavTwo: [
-          {"icon": "iconfont icon-shujuqushi", "text": "生产早会" ,url:"EarlyMeeting"},
+          {"icon": "iconfont icon-shujuqushi", "text": "生产早会" ,"url":"EarlyMeeting"},
           {"icon": "iconfont icon-icon-test", "text": "供热供气"},
           {"icon": "iconfont icon-wenti", "text": "问题排查"},
-          {"icon": "iconfont icon-yanjing", "text": "经济指标","url":"EconomicIndicators"}
+          {"icon": "iconfont icon-yanjing", "text": "经济指标","url":"EnvironmentalProtection"}
         ],
         IndexNavThird: [
-          {"icon": "iconfont icon-huanbao", "text": "环保指标","url":"EnvironmentalProtection"},
+          {"icon": "iconfont icon-huanbao", "text": "环保指标","url":"EconomicIndicators"},
           {"icon": "iconfont icon-xunjianrenyuan", "text": "现场巡查","url":"Patrol"},
           {"icon": "iconfont icon-iconset0137", "text": "电量填报"},
           {"icon": "iconfont icon-baifenhao", "text": "负债率"}

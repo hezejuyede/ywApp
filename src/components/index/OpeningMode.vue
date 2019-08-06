@@ -98,9 +98,14 @@
 <style scoped lang="less" rel="stylesheet/less">
   @import "../../assets/less/base";
   .OpeningMode{
+    position: absolute;
     max-width: 640px;
     width: 100%;
-    margin: 0 auto;
+    margin: auto;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    right: 0;
     .OpeningMode-top{
       height: 100px;
     }

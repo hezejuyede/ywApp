@@ -166,9 +166,14 @@
 <style scoped lang="less" rel="stylesheet/less">
   @import "../../assets/less/base";
   .DailyHourlyMean{
+    position: absolute;
     max-width: 640px;
     width: 100%;
-    margin: 0 auto;
+    margin: auto;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    right: 0;
     background-color: @color-F0;
     .DailyHourlyMean-date{
       width: 100%;

@@ -45,9 +45,14 @@
   @import "../../assets/less/base";
 
   .Patrol {
+    position: absolute;
     max-width: 640px;
     width: 100%;
-    margin: 0 auto;
+    margin: auto;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    right: 0;
     background-color: @color-F0;
   }
 

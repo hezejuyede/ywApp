@@ -421,12 +421,8 @@
         .icon-xinjianyemiantianjia{
           font-size: 120%;
         }
-
       }
-
-
     }
-
 
   }
   .equipmentDiv{

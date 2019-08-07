@@ -1,5 +1,5 @@
 <template>
-  <div class="loadManagement">
+  <div class="dutyLog">
     <div class="back">
       <div class="backLeft fl" @click="goBackPage">
         <i class="iconfont icon-left-trangle fl"></i>
@@ -12,7 +12,26 @@
         <i class="iconfont icon-riqi"></i>
       </div>
     </div>
-
+    <div class="dutyLogContent" ref="dutyLogContent">
+      <div class="dutyLogContentTitle">
+        <span>{{time}}</span><span style="margin-left: 5px">值长日志</span>
+      </div>
+      <div class="dutyLogContentTemplate" v-for="(item,index) in dutyLogData" :key="item.id">
+        <div class="dutyLogContentTemplateTop">
+          <div class="fl">
+            <span>登记人</span>
+            <span>：</span>
+            <span>{{item.name}}</span>
+          </div>
+          <div class="fr">
+            <span>{{item.time}}</span>
+          </div>
+        </div>
+        <div class="dutyLogContentTemplateBottom">
+          　{{item.content}}
+        </div>
+      </div>
+    </div>
     <div class="loading-container" v-show="!img.length">
       <loading></loading>
     </div>
@@ -26,7 +45,7 @@
           <el-date-picker
             style="width: 100%"
             v-model="time"
-            type="dates"
+            type="date"
             value-format="yyyy-MM-dd"
             placeholder="查询日期">
           </el-date-picker>
@@ -43,23 +62,27 @@
   import Loading from '../../../common/loading/loading';
   import axios from 'axios'
   import URL from '../../../assets/js/URL'
-
+  import {getNowTime} from '../../../assets/js/api'
   import prefix from '../../../assets/js/prefix'
 
 
   export default {
-    name: 'loadManagement',
+    name: 'dutyLog',
     data() {
       return {
-        num: 0,
-        dateValue: '',
         img: '',
-        tableHeight: "",
-
-        equipmentId: "",
-        equipmentLine: [],
-        loadManagementData: [],
-        value2: "",
+        dutyLogData: [
+          {"name":"郑建强","time":"2019-08-07 12:00","content":"这是测试内容，哈哈哈哈哈哈哈哈哈哈哈哈"},
+          {"name":"郑建强","time":"2019-08-07 12:00","content":"这是测试内容，哈哈哈哈哈哈哈哈哈哈哈哈"},
+          {"name":"郑建强","time":"2019-08-07 12:00","content":"这是测试内容，哈哈哈哈哈哈哈哈哈哈哈哈"},
+          {"name":"郑建强","time":"2019-08-07 12:00","content":"这是测试内容，哈哈哈哈哈哈哈哈哈哈哈哈"},
+          {"name":"郑建强","time":"2019-08-07 12:00","content":"这是测试内容，哈哈哈哈哈哈哈哈哈哈哈哈"},
+          {"name":"郑建强","time":"2019-08-07 12:00","content":"这是测试内容，哈哈哈哈哈哈哈哈哈哈哈哈"},
+          {"name":"郑建强","time":"2019-08-07 12:00","content":"这是测试内容，哈哈哈哈哈哈哈哈哈哈哈哈"},
+          {"name":"郑建强","time":"2019-08-07 12:00","content":"这是测试内容，哈哈哈哈哈哈哈哈哈哈哈哈"},
+          {"name":"郑建强","time":"2019-08-07 12:00","content":"这是测试内容，哈哈哈哈哈哈哈哈哈哈哈哈"},
+          {"name":"郑建强","time":"2019-08-07 12:00","content":"这是测试内容，哈哈哈哈哈哈哈哈哈哈哈哈"}
+        ],
         time: "",
         dateVisible: false
 
@@ -67,6 +90,7 @@
     },
     components: {Loading, Back},
     mounted() {
+      this.setTableHeight();
 
     },
     created() {
@@ -85,13 +109,14 @@
       setTableHeight() {
         if (/Android|webOS|iPhone|iPod|BlackBerry/i.test(navigator.userAgent)) {
           var H = window.screen.height;
-          this.tableHeight = H - 340;
+          let dutyLogContent = this.$refs.dutyLogContent;
+          dutyLogContent.style.height = H - 30 + "px";
         }
         else {
           var h = document.body.clientHeight;
-          this.tableHeight = h - 340;
+          let dutyLogContent = this.$refs.dutyLogContent;
+          dutyLogContent.style.height = h - 30 + "px";
         }
-
       },
 
       //页面加载检查用户是否登陆，没有登陆就加载登陆页面
@@ -101,92 +126,20 @@
 
         }
         else {
+          this.time = getNowTime();
 
-          this.setTableHeight();
-          this.getEquipmentLineData();
-          this.getEquipmentTableData();
 
         }
       },
 
 
       //请求table数据
-      getEquipmentTableData(data) {
-        axios.post(" " + URL + "/app/Electricity/dailyElectricityTableData", {"time": data})
+      getDutyLogData(data) {
+        axios.post(" " + URL + "/app/dutyLog/dutyLogData", {"time": data})
           .then((res) => {
             if (res.data.state === "1") {
               if (res.data.data.length > 0) {
-                this.loadManagementData = res.data.data;
-              }
-              else {
-                this.$message.warning("暂无数据");
-              }
-            }
-            else {
-              this.$message.warning(res.data.message);
-            }
-          })
-          .catch((err) => {
-            console.log(err)
-          });
-      },
-
-      //请求有几个机组线
-      getEquipmentLineData(data) {
-        axios.post(" " + URL + "/app/Electricity/dailyElectricityLineData", {"time": data})
-          .then((res) => {
-            if (res.data.state === "1") {
-              if (res.data.data.length > 0) {
-                // 基于准备好的dom，初始化echarts实例
-                let myChart = this.$echarts.init(document.getElementById('dataBar'));
-                // 绘制图表
-                myChart.setOption({
-                  title: {
-                    text: '日电量',
-                    subtext: '实时显示'
-                  },
-                  tooltip: {
-                    trigger: 'axis'
-                  },
-                  legend: {
-                    data: [res.data.data[0].range]
-                  },
-                  grid: {
-                    x: 40,
-                    borderWidth: 1,
-                    x2: 10,
-                    y2: 30
-                  },
-                  toolbox: {
-                    show: true,
-                    feature: {
-                      mark: {show: true},
-                      magicType: {show: true, type: ["line", 'bar']},
-                      restore: {show: true},
-                    }
-                  },
-                  calculable: true,
-                  xAxis: [
-                    {
-                      type: 'category',
-                      boundaryGap: false,
-                      data: res.data.data[0].time
-                    }
-                  ],
-                  yAxis: [
-                    {
-                      type: 'value'
-                    }
-                  ],
-                  series: [
-                    {
-                      name: res.data.data[0].range,
-                      type: 'bar',
-                      smooth: true,
-                      data: res.data.data[0].data,
-                    }
-                  ]
-                });
+                this.dutyLogData = res.data.data;
               }
               else {
                 this.$message.warning("暂无数据");
@@ -209,26 +162,15 @@
       //显示选择
       showChooseDate() {
         this.dateVisible = true;
-        this.time="";
-
       },
 
       //进行时间查询
       doSearch() {
-        if (this.time.length>0 && this.time.length<3) {
-          let that = this;
-          axios.all([
-            axios.post(" " + URL + "/app/Electricity/dailyElectricityTableData", {"time": this.time}),
-            axios.post(" " + URL + "/app/Electricity/dailyElectricityLineData", {"time": this.time})
-          ])
-            .then(axios.spread(function (table,line) {
-              that.equipmentLine = line.data.data;
-              that.loadManagementData = table.data.data;
-              that.dateVisible=false;
-            }));
+        if (this.time) {
+          this.getDutyLogData(this.time)
         }
         else {
-          this.$message.warning("查询时间不能为空,最多2个");
+          this.$message.warning("查询时间不能为空");
         }
       },
 
@@ -239,7 +181,7 @@
 <style scoped lang="less" rel="stylesheet/less">
   @import "../../../assets/less/base";
 
-  .loadManagement {
+  .dutyLog {
     position: absolute;
     max-width: 640px;
     width: 100%;
@@ -248,8 +190,6 @@
     left: 0;
     bottom: 0;
     right: 0;
-    background-color: @color-F0;
-
     .back {
       width: 100%;
       height: 30px;
@@ -285,32 +225,38 @@
       }
 
     }
-    .loadManagement-navBar {
-      height: 50px;
-      background-color: @color-white;
-      margin-bottom: 5px;
-      display: flex;
-      .navBar-div {
+    .dutyLogContent{
+      background-color: @color-F0;
+      overflow: auto;
+      .dutyLogContentTitle{
+        height: 50px;
         display: flex;
         align-items: center;
         justify-content: center;
-        flex: 1;
+        color: @color-blue;
       }
-    }
-    .loadManagement-line {
-      width: 100%;
-      height: 300px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      background-color: @color-white;
-      margin-bottom: 5px;
+      .dutyLogContentTemplate {
+        padding-left: 10px;
+        padding-right: 10px;
+        background-color: @color-white;
+        margin-bottom: 10px;
+        .dutyLogContentTemplateTop{
+          height: 40px;
+          line-height: 40px;
+          font-size: @font-size-small;
+          border-bottom: 1px solid @color-F0;
+        }
+        .dutyLogContentTemplateBottom{
+          padding-bottom: 10px;
+          padding-top: 10px;
+          font-size: @font-size-small;
+        }
+
+      }
+
 
     }
-    .navColor {
-      color: #3a8ee6;
-    }
-    .equipmentDiv {
+    .equipmentDiv{
       height: 180px;
       .closeBtn {
         width: 100%;
@@ -320,7 +266,7 @@
         align-items: center;
         justify-content: center;
         position: absolute;
-        top: 10px;
+        top:10px;
         left: 0;
         z-index: 999;
         .el-button {
@@ -331,7 +277,7 @@
           height: 50px;
         }
       }
-      .equipmentDivContent {
+      .equipmentDivContent{
         height: 100px;
         display: flex;
         align-items: center;
@@ -354,6 +300,7 @@
     }
 
   }
+
 
   .loading-container {
     position: absolute;

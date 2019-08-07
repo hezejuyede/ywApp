@@ -103,7 +103,7 @@
         IndexNavOne: [
           {"icon": "iconfont icon-pulse", "text": "负荷预测","url":"loadForecasting"},
           {"icon": "iconfont icon-xiaoliangyuce", "text": "调度计划","url":"schedulingPlan"},
-          {"icon": "iconfont icon-caozuorizhi", "text": "值长日志"},
+          {"icon": "iconfont icon-caozuorizhi", "text": "值长日志","url":"dutyLog"},
           {"icon": "iconfont icon-message-channel", "text": "生产短信"}
         ],
         IndexNavTwo: [

@@ -16,7 +16,7 @@ import fillInMonth from '../components/index/ElectricityManagement/fillInMonth'
 import fillInYear from '../components/index/ElectricityManagement/fillInYear'
 import loadForecasting from '../components/index/LoadForecasting/loadForecasting'
 import schedulingPlan from '../components/index/schedulingPlan/schedulingPlan'
-
+import dutyLog from '../components/index/dutyLog/dutyLog.vue'
 
 
 import LoadManagement from '../components/index/LoadManagement/LoadManagement'
@@ -107,6 +107,11 @@ export default new Router({
       path: '/schedulingPlan',
       name:'schedulingPlan',
       component:schedulingPlan
+    },
+    {
+      path: '/dutyLog',
+      name:'dutyLog',
+      component:dutyLog
     },
 
 

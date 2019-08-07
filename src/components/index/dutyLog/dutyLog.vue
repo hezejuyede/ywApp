@@ -71,18 +71,7 @@
     data() {
       return {
         img: '',
-        dutyLogData: [
-          {"name":"郑建强","time":"2019-08-07 12:00","content":"这是测试内容，哈哈哈哈哈哈哈哈哈哈哈哈"},
-          {"name":"郑建强","time":"2019-08-07 12:00","content":"这是测试内容，哈哈哈哈哈哈哈哈哈哈哈哈"},
-          {"name":"郑建强","time":"2019-08-07 12:00","content":"这是测试内容，哈哈哈哈哈哈哈哈哈哈哈哈"},
-          {"name":"郑建强","time":"2019-08-07 12:00","content":"这是测试内容，哈哈哈哈哈哈哈哈哈哈哈哈"},
-          {"name":"郑建强","time":"2019-08-07 12:00","content":"这是测试内容，哈哈哈哈哈哈哈哈哈哈哈哈"},
-          {"name":"郑建强","time":"2019-08-07 12:00","content":"这是测试内容，哈哈哈哈哈哈哈哈哈哈哈哈"},
-          {"name":"郑建强","time":"2019-08-07 12:00","content":"这是测试内容，哈哈哈哈哈哈哈哈哈哈哈哈"},
-          {"name":"郑建强","time":"2019-08-07 12:00","content":"这是测试内容，哈哈哈哈哈哈哈哈哈哈哈哈"},
-          {"name":"郑建强","time":"2019-08-07 12:00","content":"这是测试内容，哈哈哈哈哈哈哈哈哈哈哈哈"},
-          {"name":"郑建强","time":"2019-08-07 12:00","content":"这是测试内容，哈哈哈哈哈哈哈哈哈哈哈哈"}
-        ],
+        dutyLogData: [],
         time: "",
         dateVisible: false
 
@@ -127,7 +116,7 @@
         }
         else {
           this.time = getNowTime();
-
+          this.getDutyLogData(this.time)
 
         }
       },
@@ -140,6 +129,7 @@
             if (res.data.state === "1") {
               if (res.data.data.length > 0) {
                 this.dutyLogData = res.data.data;
+                this.dateVisible = false;
               }
               else {
                 this.$message.warning("暂无数据");
@@ -167,7 +157,7 @@
       //进行时间查询
       doSearch() {
         if (this.time) {
-          this.getDutyLogData(this.time)
+          this.getDutyLogData(this.time);
         }
         else {
           this.$message.warning("查询时间不能为空");
@@ -225,11 +215,11 @@
       }
 
     }
-    .dutyLogContent{
+    .dutyLogContent {
       background-color: @color-F0;
       overflow: auto;
-      .dutyLogContentTitle{
-        height: 50px;
+      .dutyLogContentTitle {
+        height: 40px;
         display: flex;
         align-items: center;
         justify-content: center;
@@ -240,13 +230,13 @@
         padding-right: 10px;
         background-color: @color-white;
         margin-bottom: 10px;
-        .dutyLogContentTemplateTop{
+        .dutyLogContentTemplateTop {
           height: 40px;
           line-height: 40px;
           font-size: @font-size-small;
           border-bottom: 1px solid @color-F0;
         }
-        .dutyLogContentTemplateBottom{
+        .dutyLogContentTemplateBottom {
           padding-bottom: 10px;
           padding-top: 10px;
           font-size: @font-size-small;
@@ -254,9 +244,8 @@
 
       }
 
-
     }
-    .equipmentDiv{
+    .equipmentDiv {
       height: 180px;
       .closeBtn {
         width: 100%;
@@ -266,7 +255,7 @@
         align-items: center;
         justify-content: center;
         position: absolute;
-        top:10px;
+        top: 10px;
         left: 0;
         z-index: 999;
         .el-button {
@@ -277,7 +266,7 @@
           height: 50px;
         }
       }
-      .equipmentDivContent{
+      .equipmentDivContent {
         height: 100px;
         display: flex;
         align-items: center;
@@ -298,9 +287,7 @@
       }
 
     }
-
   }
-
 
   .loading-container {
     position: absolute;

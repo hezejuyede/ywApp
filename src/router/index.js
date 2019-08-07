@@ -15,6 +15,7 @@ import fillInDay from '../components/index/ElectricityManagement/fillInDay'
 import fillInMonth from '../components/index/ElectricityManagement/fillInMonth'
 import fillInYear from '../components/index/ElectricityManagement/fillInYear'
 import loadForecasting from '../components/index/LoadForecasting/loadForecasting'
+import schedulingPlan from '../components/index/schedulingPlan/schedulingPlan'
 
 
 
@@ -101,6 +102,11 @@ export default new Router({
       path: '/loadForecasting',
       name:'loadForecasting',
       component: loadForecasting
+    },
+    {
+      path: '/schedulingPlan',
+      name:'schedulingPlan',
+      component:schedulingPlan
     },
 
 

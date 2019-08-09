@@ -15,22 +15,49 @@
     <div class="unitStartStopNav">
       <div class="unitStartStopNavTemplate fl"
            v-for="(item,index) in unitStartStopNav">
-        <div class="unitStartStopNavTemplateDiv" :class="{'navColor':index === num}">
+        <div class="unitStartStopNavTemplateDiv" :class="{'navColor':index === num}" @click="changeNavBar(index,item.id)">
           <div class="" style="margin-bottom: 10px">{{item.text}}</div>
           <div class="">{{item.number}}</div>
         </div>
       </div>
-
     </div>
+    <div class="unitStartStopContent">
+      <div class="unitStartStopInfo">
+        <div class="unitStartStopInfoLeft">
+          <span style="margin-right: 10px">年停机次数</span>
+          <span>{{count}}</span>
+        </div>
+        <div class="unitStartStopInfoRight">
+          <span style="margin-right: 10px">年停机时长</span>
+          <span>{{duration}}</span>
+        </div>
+      </div>
+      <div class="unitStartStopTable">
+        <el-table
+          :data="unitStartStopData"
+          :height="this.tableHeight"
+          style="width: 100%">
+          <el-table-column
+            fixed
+            prop="state"
+            align="center"
+            width="120"
+            label="状态">
+          </el-table-column>
+          <el-table-column
+            prop="time"
+            align="center"
+            label="时间">
+          </el-table-column>
+          <el-table-column
+            prop="jxsc"
+            align="center"
+            label="继续时长">
+          </el-table-column>
+        </el-table>
 
-    <div class="unitStartStopInfo">
-
+      </div>
     </div>
-
-    <div class="unitStartStopTable">
-
-    </div>
-
     <div class="loading-container" v-show="!img.length">
       <loading></loading>
     </div>
@@ -46,7 +73,7 @@
             style="width: 100%"
             v-model="time"
             type="year"
-            value-format="yyyy-MM-dd"
+            value-format="yyyy"
             placeholder="查询日期">
           </el-date-picker>
         </div>
@@ -72,16 +99,21 @@
       return {
         img: '',
         unitStartStopNav: [
-          {"text": "#1", "number": "120MW"},
-          {"text": "#2", "number": "130MW"},
-          {"text": "#3", "number": "140MW"},
-          {"text": "#4", "number": "150MW"},
-          {"text": "#5", "number": "160MW"},
-          {"text": "#6", "number": "170MW"}
+          {"text": "#1", "number": "120MW", "id": "1"},
+          {"text": "#2", "number": "130MW", "id": "2"},
+          {"text": "#3", "number": "140MW", "id": "3"},
+          {"text": "#4", "number": "150MW", "id": "4"},
+          {"text": "#5", "number": "160MW", "id": "5"},
+          {"text": "#6", "number": "170MW", "id": "6"}
         ],
         num: 0,
-        time: "",
-        dateVisible: false
+        id:"1",
+        time: "2019",
+        count: "",
+        duration: "",
+        dateVisible: false,
+        unitStartStopData: [],
+        tableHeight: Number
 
       }
     },
@@ -106,11 +138,11 @@
       setTableHeight() {
         if (/Android|webOS|iPhone|iPod|BlackBerry/i.test(navigator.userAgent)) {
           var H = window.screen.height;
-
+          this.tableHeight = H - 150 + "px";
         }
         else {
           var h = document.body.clientHeight;
-
+          this.tableHeight = h - 150 + "px";
         }
       },
 
@@ -121,20 +153,21 @@
 
         }
         else {
-          this.time = getNowTime();
           this.setTableHeight();
-
+          this.getUnitStartStopData(this.id, this.time);
         }
       },
 
 
       //请求table数据
-      getDutyLogData(data) {
-        axios.post(" " + URL + "/app/dutyLog/dutyLogData", {"time": data})
+      getUnitStartStopData(data1,data2) {
+        axios.post(" " + URL + "/app/unitStartStop/unitStartStop", {"time": data1,"id":data2})
           .then((res) => {
             if (res.data.state === "1") {
               if (res.data.data.length > 0) {
-                this.dutyLogData = res.data.data;
+                this.unitStartStopData = res.data.data[0].data;
+                this.duration = res.data.data[0].duration;
+                this.count = res.data.data[0].count;
                 this.dateVisible = false;
               }
               else {
@@ -163,13 +196,19 @@
       //进行时间查询
       doSearch() {
         if (this.time) {
-          this.getDutyLogData(this.time);
+          this.getUnitStartStopData(this.id, this.time);
         }
         else {
           this.$message.warning("查询时间不能为空");
         }
       },
-      
+
+      //改变顶部导航
+      changeNavBar(index, id) {
+        this.num = index;
+        this.id = id;
+        this.getUnitStartStopData(this.id, this.time);
+      },
 
 
     }
@@ -223,17 +262,17 @@
       }
 
     }
-    .unitStartStopNav{
+    .unitStartStopNav {
       height: 60px;
       padding-top: 5px;
-      .unitStartStopNavTemplate{
+      .unitStartStopNavTemplate {
         width: 14.4%;
         height: 50px;
         border-radius: 10px;
         margin-left: 2%;
         font-size: @font-size-small-s;
         background-color: @color-white;
-        .unitStartStopNavTemplateDiv{
+        .unitStartStopNavTemplateDiv {
           width: 100%;
           height: 50px;
           display: flex;
@@ -243,6 +282,29 @@
           border-radius: 10px;
         }
       }
+    }
+    .unitStartStopInfo {
+      margin-top: 5px;
+      height: 50px;
+      background-color: @color-white;
+      display: flex;
+      font-size: @font-size-medium;
+      .unitStartStopInfoLeft {
+        flex: 1;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border-right: 2px solid @color-F0;
+      }
+      .unitStartStopInfoRight {
+        flex: 1;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+    }
+    .unitStartStopTable {
+      margin-top: 10px;
     }
     .equipmentDiv {
       height: 180px;
@@ -287,10 +349,12 @@
 
     }
   }
-  .navColor{
-    background-color:@color-blue;
+
+  .navColor {
+    background-color: @color-blue;
     color: @color-white;
   }
+
   .loading-container {
     position: absolute;
     max-width: 640px;

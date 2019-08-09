@@ -26,7 +26,7 @@ import EnvironmentalProtection from '../components/index/EconomicIndicators/Envi
 import DailyHourlyMean from '../components/index/DailyHourlyMean'
 import EarlyMeeting from '../components/index/EarlyMeeting'
 import Patrol from '../components/index/Patrol'
-import OpeningMode from '../components/index/OpeningMode'
+import OpeningMode from '../components/index/OpeningMode/OpeningMode'
 import TwoRules from '../components/index/TwoRules'
 
 Vue.use(Router);

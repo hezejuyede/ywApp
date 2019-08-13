@@ -18,6 +18,7 @@ import loadForecasting from '../components/index/LoadForecasting/loadForecasting
 import schedulingPlan from '../components/index/schedulingPlan/schedulingPlan'
 import dutyLog from '../components/index/dutyLog/dutyLog.vue'
 import unitStartStop from '../components/index/unitStartStop/unitStartStop.vue'
+import onlineFeedback from '../components/message/onlineFeedback'
 
 
 import LoadManagement from '../components/index/LoadManagement/LoadManagement'
@@ -43,11 +44,23 @@ export default new Router({
       name: 'DataAnalysis',
       component: DataAnalysis
     },
+
+
+
+
+
     {
       path: '/Message',
       name: 'Message',
       component: Message
     },
+    {
+      path: '/onlineFeedback',
+      name: 'onlineFeedback',
+      component:onlineFeedback
+    },
+
+
     {
       path: '/User',
       name: 'User',
@@ -113,6 +126,11 @@ export default new Router({
       path: '/dutyLog',
       name:'dutyLog',
       component:dutyLog
+    },
+    {
+      path: '/unitStartStop',
+      name:'unitStartStop',
+      component:unitStartStop
     },
     {
       path: '/unitStartStop',

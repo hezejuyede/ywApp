@@ -9,7 +9,7 @@
         <span>信息中心</span>
         <i class="iconfont icon-solid-person"></i>
       </div>
-      <div class="LxKf-center" @click="HideBottom">
+      <div class="LxKf-center">
         <div class="" v-for="(item,index) in  onMessage">
           <div class="left-template"  v-show="item.direction === 'left'">
             <div class="left-template-time">{{item.time}}</div>
@@ -70,8 +70,8 @@
         EmitMessage: '',
         onMessage: [],
 
-        avatar: '',
-        username: '',
+        avatar: '11',
+        username: '11',
         content:'',
 
 
@@ -127,7 +127,7 @@
     },
     created() {
       this._getUserCollect();
-      this._getChatList();
+      /*this._getChatList();*/
       setTimeout(() => {
         this.getLoading();
       }, 1000);
@@ -136,6 +136,9 @@
       _getUserCollect() {
         if (sessionStorage.getItem("userInfo") === null) {
           console.log("用户还没有登录")
+          this.$socket.emit('CustomerService', {
+            "username": this.username,
+          });
         }
         else {
           let UserInfo = sessionStorage.getItem("userInfo");

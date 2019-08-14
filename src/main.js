@@ -5,18 +5,20 @@ import App from './App'
 import router from './router'
 import ElementUI from 'element-ui'
 import 'element-ui/lib/theme-chalk/index.css'
-
-
-
-/*import VueSocketio from 'vue-socket.io';*/
-import socketio from 'socket.io-client';
+import URl from './assets/js/URL'
 import echarts from 'echarts';
+import VueSocketIo from 'vue-socket.io';
+
+Vue.use(new VueSocketIo({
+  debug: true,
+  connection: URl,
+}));
 Vue.config.productionTip = false;
 
 /* eslint-disable no-new */
 Vue.use(ElementUI);
 Vue.prototype.$echarts = echarts;
-/*Vue.use(VueSocketio, socketio('http://localhost:3000'));*/
+
 new Vue({
   el: '#app',
   router,

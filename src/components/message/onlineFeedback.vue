@@ -6,7 +6,7 @@
     <div id="LxKf">
       <div class="LxKf-top">
         <i class="iconfont icon-xiangzuo" @click="backIndex"></i>
-        <span>信息中心</span>
+        <span>{{chatObject}}</span>
         <i class="iconfont icon-solid-person"></i>
       </div>
       <div class="LxKf-center">
@@ -69,6 +69,8 @@
         HideModal: true,
         EmitMessage: '',
         onMessage: [],
+        chatObject:"",
+        chatObjectId:"",
 
         avatar: '11',
         username: '11',
@@ -134,6 +136,9 @@
     },
     methods: {
       _getUserCollect() {
+        this.chatObject=this.$route.query.userName;
+        this.chatObjectId=this.$route.query.chatObjectId;
+
         if (sessionStorage.getItem("userInfo") === null) {
           console.log("用户还没有登录")
           this.$socket.emit('CustomerService', {

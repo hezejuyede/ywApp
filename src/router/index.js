@@ -19,6 +19,7 @@ import schedulingPlan from '../components/index/schedulingPlan/schedulingPlan'
 import dutyLog from '../components/index/dutyLog/dutyLog.vue'
 import unitStartStop from '../components/index/unitStartStop/unitStartStop.vue'
 import onlineFeedback from '../components/message/onlineFeedback'
+import messageList from '../components/message/messageList.vue'
 
 
 import LoadManagement from '../components/index/LoadManagement/LoadManagement'
@@ -58,6 +59,11 @@ export default new Router({
       path: '/onlineFeedback',
       name: 'onlineFeedback',
       component:onlineFeedback
+    },
+    {
+      path: '/messageList',
+      name: 'messageList',
+      component:messageList
     },
 
 

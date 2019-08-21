@@ -7,63 +7,35 @@
       <span>用户中心</span>
     </div>
     <div class="userInfo-center">
-      <div class="userInfo-center-login">
+      <div class="userInfo-center-login" v-if="userState ==='1'">
+        <div class="userInfoDiv">
+         <div class="userInfoDivAvatar">
+           <img src="../../assets/img/6.jpg" alt="">
+         </div>
+          <div class="userInfoDivInfo">
+            <div class="userInfoDivInfoText"><div style="font-size: 20px;color:#ffffff">{{username}}</div></div>
+            <div class="userInfoDivInfoStation"><div  style="color: #ffffff;margin-top:5px;font-size: 13px">专工</div></div>
+          </div>
+        </div>
+
+      </div>
+      <div class="userInfo-center-login" v-if="userState !=='1'">
         <div class="userInfo-center-login-avatar">
           <img src="../../assets/img/avatar.png" alt="">
         </div>
         <div class="userInfo-center-login-text" @click="goToLoginPage">
-           点击登录
+          点击登录
         </div>
       </div>
-
     </div>
-    <div class="userInfo-bottom">
-      <div class="userInfo-bottom-template">
+    <div class="userInfo-bottom" ref="userInfoBottom">
+      <div class="userInfo-bottom-template" v-for="(item,index) in bottomData" :key="item.id">
         <div class="template-left">
-          <i class="iconfont icon-xuexi"></i>
+          <i :class="item.icon"></i>
         </div>
         <div class="template-right">
           <div class="template-right-text">
-            学习中心
-          </div>
-          <div class="template-right-icon">
-            <i class="iconfont icon-you"></i>
-          </div>
-        </div>
-      </div>
-      <div class="userInfo-bottom-template">
-        <div class="template-left">
-          <i class="iconfont icon-fankui"></i>
-        </div>
-        <div class="template-right">
-          <div class="template-right-text">
-            反馈中心
-          </div>
-          <div class="template-right-icon">
-            <i class="iconfont icon-you"></i>
-          </div>
-        </div>
-      </div>
-      <div class="userInfo-bottom-template">
-        <div class="template-left">
-          <i class="iconfont icon-rzxx"></i>
-        </div>
-        <div class="template-right">
-          <div class="template-right-text">
-            日志中心
-          </div>
-          <div class="template-right-icon">
-            <i class="iconfont icon-you"></i>
-          </div>
-        </div>
-      </div>
-      <div class="userInfo-bottom-template">
-        <div class="template-left">
-          <i class="iconfont icon-shezhi"></i>
-        </div>
-        <div class="template-right">
-          <div class="template-right-text">
-             设置中心
+            {{item.text}}
           </div>
           <div class="template-right-icon">
             <i class="iconfont icon-you"></i>
@@ -81,16 +53,25 @@
     name: 'userInfo',
     data() {
       return {
-        img: ''
+        img: "",
+        username:"",
+        userState:"2",
+        bottomData:[
+          {"icon": "iconfont icon-iconset0137", "text": "生产早会","url":"schedulingPlan"},
+          {"icon": "iconfont icon-caozuorizhi", "text": "值长日志","url":"dutyLog"},
+          {"icon": "iconfont icon-quit", "text": "退出登陆" ,"url":"EarlyMeeting"}
+        ]
       }
     },
     components: {FooterView,Loading},
     mounted() {
+      this.setTableHeight();
     },
     created() {
       setTimeout(() => {
         this.getLoading();
       }, 1000);
+      this.getAdminState();
     },
     methods: {
       getLoading() {
@@ -100,8 +81,38 @@
       //  前往登陆页面
       goToLoginPage(){
         this.$router.push("/UserLogin")
-      }
+      },
 
+      //页面加载检查用户是否登陆，没有登陆就加载登陆页面
+      getAdminState() {
+        const userInfo = localStorage.getItem("loginMessage");
+        if (userInfo === null) {
+          this.$router.push("/UserLogin")
+        }
+        else {
+          let json = JSON.parse(userInfo);
+          this.userState = json.state;
+          this.username = json.username;
+          console.log(this.userState)
+
+
+
+        }
+      },
+
+      //根据屏幕设置DIV高度
+      setTableHeight() {
+        let div = this.$refs.userInfoBottom;
+        if (/Android|webOS|iPhone|iPod|BlackBerry/i.test(navigator.userAgent)) {
+          var H = window.screen.height;
+          div.style.height = H - 280 + "px";
+        }
+        else {
+          var h = document.body.clientHeight;
+          div.style.height = h - 280 + "px";
+        }
+
+      },
 
 
     }
@@ -118,6 +129,7 @@
     left: 0;
     bottom: 0;
     right: 0;
+    background-color: @color-F0;
   }
   .userInfo-top{
     height:50px;
@@ -133,8 +145,39 @@
     }
   }
   .userInfo-center{
+    margin-bottom: 10px;
+    .userInfoDiv{
+      width: 100%;
+      height: 150px;
+      background-color: #3492E9;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      .userInfoDivAvatar{
+        flex: 3;
+        height: 80px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        img{
+          height: 60px;
+          width: 60px;
+          border-radius: 50%;
+        }
+      }
+      .userInfoDivInfo{
+        flex: 7;
+        height: 80px;
+        display: flex;
+        align-items: start;
+        justify-content: center;
+        flex-direction: column;
+
+
+      }
+    }
     .userInfo-center-login{
-      height: 100px;
+      height: 150px;
       width: 100%;
       display: flex;
       align-items: center;
@@ -160,10 +203,10 @@
   }
   .userInfo-bottom{
     width: 100%;
-    height:200px;
     padding-top: 10px;
+    background-color: @color-white;
     .userInfo-bottom-template{
-      height: 40px;
+      height: 50px;
       display: flex;
       align-items: center;
       margin-top: 5px;
@@ -172,7 +215,7 @@
         display: flex;
         align-items: center;
         justify-content: center;
-        .icon-xuexi{
+        .icon-iconset0137{
           display: block;
           width: 30px;
           height: 30px;
@@ -182,7 +225,7 @@
           color: @color-white;
           border-radius: 10%;
         }
-        .icon-fankui{
+        .icon-caozuorizhi{
           display: block;
           width: 30px;
           height: 30px;
@@ -192,7 +235,7 @@
           color: @color-white;
           border-radius: 10%;
         }
-        .icon-rzxx{
+        .icon-quit{
           display: block;
           width: 30px;
           height: 30px;
@@ -203,18 +246,6 @@
           border-radius: 10%;
 
         }
-        .icon-shezhi{
-          display: block;
-          width: 30px;
-          height: 30px;
-          background-color:  #586997;
-          line-height: 30px;
-          text-align: center;
-          color: @color-white;
-          border-radius: 10%;
-        }
-
-
       }
       .template-right{
         height: 100%;

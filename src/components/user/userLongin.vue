@@ -154,7 +154,7 @@
                   that.message = "";
                   that.HideModal = true;
                   localStorage.setItem("IndexUrl", 0);
-                  that.$router.push({path: "/"})
+                  that.$router.push({path: "/User"})
                 }
                 setTimeout(a, 2000);
 

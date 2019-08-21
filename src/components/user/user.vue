@@ -9,12 +9,12 @@
     <div class="userInfo-center">
       <div class="userInfo-center-login" v-if="userState ==='1'">
         <div class="userInfoDiv">
-         <div class="userInfoDivAvatar">
-           <img src="../../assets/img/6.jpg" alt="">
-         </div>
-          <div class="userInfoDivInfo">
-            <div class="userInfoDivInfoText"><div style="font-size: 20px;color:#ffffff">{{username}}</div></div>
-            <div class="userInfoDivInfoStation"><div  style="color: #ffffff;margin-top:5px;font-size: 13px">专工</div></div>
+          <div class="userInfoDivAvatar">
+            <img src="../../assets/img/6.jpg" alt="">
+          </div>
+          <div class="userInfoDivUserInfo">
+            <div style="margin-bottom: 5px;font-size: 20px">{{username}}</div>
+            <div style="font-size: 13px">{{workStation}}</div>
           </div>
         </div>
 
@@ -29,7 +29,7 @@
       </div>
     </div>
     <div class="userInfo-bottom" ref="userInfoBottom">
-      <div class="userInfo-bottom-template" v-for="(item,index) in bottomData" :key="item.id">
+      <div class="userInfo-bottom-template" v-for="(item,index) in bottomData" :key="item.id" @click="goToUserPage(index)">
         <div class="template-left">
           <i :class="item.icon"></i>
         </div>
@@ -47,18 +47,21 @@
   </div>
 </template>
 <script type="text/ecmascript-6">
-  import FooterView from '../../common/footer/footer'
+  import FooterView from '../../common/footer/footer';
   import Loading from '../../common/loading/loading';
+  import URL  from '../../assets/js/URL'
+  import axios from 'axios';
   export default {
     name: 'userInfo',
     data() {
       return {
         img: "",
         username:"",
+        workStation:"专工",
         userState:"2",
         bottomData:[
-          {"icon": "iconfont icon-iconset0137", "text": "生产早会","url":"schedulingPlan"},
-          {"icon": "iconfont icon-caozuorizhi", "text": "值长日志","url":"dutyLog"},
+          {"icon": "iconfont icon-iconset0137", "text": "填写早会","url":"schedulingPlan"},
+          {"icon": "iconfont icon-caozuorizhi", "text": "填写日志","url":"dutyLog"},
           {"icon": "iconfont icon-quit", "text": "退出登陆" ,"url":"EarlyMeeting"}
         ]
       }
@@ -94,9 +97,6 @@
           this.userState = json.state;
           this.username = json.username;
           console.log(this.userState)
-
-
-
         }
       },
 
@@ -113,6 +113,49 @@
         }
 
       },
+
+      goToUserPage(index){
+        if(index===2){
+          this.$confirm('是否确认离开退出?', '提示', {
+            confirmButtonText: '确定',
+            cancelButtonText: '取消',
+            customClass: 'messageBox-prompt-test',
+            type: 'warning'
+          })
+            .then(() => {
+              axios.post("  " + URL + "/app/user/userLeavePost", {"username": this.userName})
+                .then((res) => {
+                  if (res.data.state === "1") {
+                    this.$message({
+                      type: 'success',
+                      message: res.data.message
+                    });
+                    setTimeout(() => {
+                      localStorage.removeItem("loginMessage");
+                      
+                      window.location.reload();
+                    }, 3000);
+                  }
+                  else {
+                    this.$message({
+                      type: 'warning',
+                      message: res.data.message
+                    });
+                  }
+                })
+                .catch(() => {
+                  console.log(err)
+                });
+            })
+            .catch(() => {
+              this.$message({
+                type: 'info',
+                message: '已取消退出'
+              });
+            });
+        }
+
+      }
 
 
     }
@@ -154,26 +197,23 @@
       align-items: center;
       justify-content: center;
       .userInfoDivAvatar{
-        flex: 3;
         height: 80px;
         display: flex;
         align-items: center;
         justify-content: center;
         img{
-          height: 60px;
-          width: 60px;
+          height: 80px;
+          width: 80px;
           border-radius: 50%;
         }
       }
-      .userInfoDivInfo{
-        flex: 7;
-        height: 80px;
+      .userInfoDivUserInfo{
         display: flex;
-        align-items: start;
+        align-items: center;
         justify-content: center;
         flex-direction: column;
-
-
+        margin-left: 10px;
+        color: @color-white;
       }
     }
     .userInfo-center-login{
@@ -278,4 +318,12 @@
     transform: translateY(-50%);
   }
 
+
+
+</style>
+
+<style>
+  .el-message-box {
+    width: 300px;
+  }
 </style>

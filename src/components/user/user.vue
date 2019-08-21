@@ -96,14 +96,7 @@
       getLoading() {
         this.img = ["1"]
       },
-      //退出登陆
-      outLogin() {
-        alert("hahah");
-      },
-      //查看用户消息
-      userMessage() {
-        alert("hahah");
-      },
+
       //  前往登陆页面
       goToLoginPage(){
         this.$router.push("/UserLogin")

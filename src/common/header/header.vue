@@ -67,20 +67,16 @@
   methods: {
     //页面加载检查用户是否登陆，没有登陆就加载登陆页面
     getAdminState() {
-      const userInfo = localStorage.getItem("userInfo");
+      const userInfo = localStorage.getItem("loginMessage");
       if (userInfo === null) {
-
+        this.$router.push("/UserLogin")
       }
       else {
-        this.getWeatherForecasts();
         this.getPlantWideLoad();
         this.getPlantWideLoadRate();
         this.getPlantWideElectricQuantity();
         this.getPlantWideCrewRate();
-
-
-
-
+        this.getWeatherForecasts();
       }
     },
 

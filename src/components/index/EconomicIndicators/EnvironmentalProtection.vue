@@ -208,10 +208,9 @@
 
       //页面加载检查用户是否登陆，没有登陆就加载登陆页面
       getAdminState() {
-        const userInfo = localStorage.getItem("userInfo");
+        const userInfo = localStorage.getItem("loginMessage");
         if (userInfo === null) {
-          console.log(11)
-
+          this.$router.push("/UserLogin")
         }
         else {
           this.setTableHeight();

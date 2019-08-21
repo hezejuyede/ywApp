@@ -7,7 +7,7 @@
       </header>
       <div class="register">
         <div class="register-top">
-          注册管理员用户
+          注册用户
         </div>
         <div class="register-bottom">
           <div class="register-bottom-template">
@@ -67,7 +67,7 @@
                 @focus="verificationCodeFocus(code)"
                 v-model="code"
                 type="text"
-                placeholder="请输入管理员注册码"/>
+                placeholder="请输入用户注册码"/>
             </div>
             <div class="codeText">
               <span>{{codeErrText}}</span>
@@ -76,7 +76,7 @@
           <button @click="register">点击注册</button>
         </div>
       </div>
-      <footer class=""> ©2018 四川广安发电有限责任公司</footer>
+      <footer class=""> ©2019 四川广安发电有限责任公司</footer>
     </div>
     <Modal :msg="message"
            :isHideModal="HideModal"></Modal>
@@ -91,6 +91,7 @@
   import Modal from '../../common/modal/modal'
   import Loading from '../../common/loading/loading';
   import Back from '../../common/back/back';
+  import URL  from '../../assets/js/URL'
 
   export default {
     name: 'register',
@@ -199,27 +200,36 @@
       },
       register() {
         if (this.userNameState === true && this.passwordState === true && this.passwordState2 === true && this.codeState === true) {
-          axios.post("/api/userRegister", {
+          axios.post(" " + URL + "/app/user/userRegister", {
             username: this.username,
             password: this.password,
             code:this.code
           })
             .then((res) => {
-              if (res.data === "1") {
-                this.message = "注册成功";
+              if (res.data.state === "1") {
+                let LoginMessage = {
+                  "username": this.username,
+                  "password": this.password,
+                  "state":"1"
+                };
+                let loginMessage = JSON.stringify(LoginMessage);
+                localStorage.setItem('loginMessage', loginMessage);
+
+                this.message = res.data.message;
                 this.HideModal = false;
                 const that = this;
 
                 function a() {
                   that.message = "";
                   that.HideModal = true;
-                  that.$router.push({path: "/IndexLogin"})
+                  that.$router.push({path: "/User"})
+
                 }
 
                 setTimeout(a, 2000);
               }
-              else if (res.data === "2") {
-                this.message = "该用户已经注册";
+              else if (res.data.state === "2") {
+                this.message = res.data.message;
                 this.HideModal = false;
                 const that = this;
 
@@ -228,34 +238,52 @@
                   that.HideModal = true;
                   that.username = '';
                   that.password = '';
+                  that.password2= '';
                 }
 
                 setTimeout(b, 2000);
               }
-              else if (res.data === "-1") {
-                this.message = "注册失败";
+              else if (res.data.state === "-1") {
+                this.message = res.data.message;
                 this.HideModal = false;
                 const that = this;
 
                 function c() {
                   that.message = "";
                   that.HideModal = true;
-                  that.password = '';
+                  that.password = "";
+                  that.password2= '';
                 }
 
                 setTimeout(c, 2000);
               }
-              else if (res.data === "-2") {
-                this.message = "管理员注册码错误";
+              else if (res.data.state === "-2") {
+                this.message = res.data.message;
                 this.HideModal = false;
                 const that = this;
-                function c() {
+
+                function d() {
                   that.message = "";
                   that.HideModal = true;
                   that.password = '';
+                  that.password2= '';
                 }
 
-                setTimeout(c, 2000);
+                setTimeout(d, 2000);
+              }
+              else {
+                this.message = res.data.message;
+                this.HideModal = false;
+                const that = this;
+
+                function f() {
+                  that.message = "";
+                  that.HideModal = true;
+                  that.password = '';
+                  that.password2= '';
+                }
+
+                setTimeout(f, 2000);
               }
             })
             .catch((err) => {
@@ -375,10 +403,10 @@
           height: 35px;
           background-color: @color-green;
           color: @color-white;
-          font-size: @font-size-medium;
+          font-size: @font-size-large;
           text-align: center;
           line-height: 35px;
-          border-radius: 5%;
+          border-radius: 10px;
           border: 0;
         }
       }

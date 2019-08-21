@@ -4,12 +4,7 @@
       <loading></loading>
     </div>
     <div class="userInfo-top">
-      <div class="fr">
-        <i class="iconfont icon-quit" @click="outLogin"></i>
-      </div>
-      <div class="fr">
-        <i class="iconfont icon-xiaoxi" @click="userMessage"></i>
-      </div>
+      <span>用户中心</span>
     </div>
     <div class="userInfo-center">
       <div class="userInfo-center-login">
@@ -20,11 +15,7 @@
            点击登录
         </div>
       </div>
-      <div class="userInfo-center-message">
-        <div class="">
-          <i class="iconfont"></i>
-        </div>
-      </div>
+
     </div>
     <div class="userInfo-bottom">
       <div class="userInfo-bottom-template">
@@ -139,15 +130,12 @@
     height:50px;
     line-height: 50px;
     background-color: #3492E9;
-    padding-right: 5%;
     cursor: pointer;
-    >div:first-child{
-      margin-left: 15px;
-    }
-    .icon-quit{
-      color: @color-white;
-    }
-    .icon-xiaoxi{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    span{
+      font-size: @font-size-large;
       color: @color-white;
     }
   }

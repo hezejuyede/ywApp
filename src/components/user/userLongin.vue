@@ -39,7 +39,7 @@
           <button @click="login">登录</button>
         </div>
       </div>
-      <footer class=""> ©2018 四川广安发电有限责任公司</footer>
+      <footer class=""> ©2019 四川广安发电有限责任公司</footer>
     </div>
     <Modal :msg="message"
            :isHideModal="HideModal"></Modal>
@@ -51,6 +51,7 @@
   import Modal from '../../common/modal/modal'
   import Loading from '../../common/loading/loading';
   import Back from '../../common/back/back'
+  import URL  from '../../assets/js/URL'
 
 
   export default {
@@ -76,6 +77,7 @@
       setTimeout(() => {
         this.getLoading();
       }, 1000);
+      this.getLoginMessage();
     },
     methods: {
       getLoading() {
@@ -83,6 +85,22 @@
       },
 
 
+      //页面加载检查上次登录的账户
+      getLoginMessage() {
+        let loginMessage =localStorage.getItem('loginMessage');
+        if(loginMessage===null){
+
+        }
+        else {
+          let loginData = JSON.parse(loginMessage);
+          this.username =loginData.username;
+          this.password =loginData.password;
+          this.userNameState =true;
+          this.passwordState = true
+        }
+
+
+      },
 
       userNameBlur(username) {
         if (username.length === 0) {
@@ -114,29 +132,48 @@
       },
       login() {
         if (this.userNameState === true && this.passwordState === true) {
-          axios.post("/api/adminLogin", {
+          axios.post(" " + URL + "/app/user/userLogin", {
             username: this.username,
             password: this.password
           })
             .then((res) => {
               if (res.data.state === "1") {
-                let userInfo = res.data;
-                userInfo = JSON.stringify(userInfo);
-                sessionStorage.setItem("userInfo", userInfo);
-                this.message = "登录成功";
+                let LoginMessage = {
+                  "username": this.username,
+                  "password": this.password,
+                  "state":"1"
+                };
+                let loginMessage = JSON.stringify(LoginMessage);
+                localStorage.setItem('loginMessage', loginMessage);
+
+                this.message =res.data.message;
+
                 this.HideModal = false;
                 const that = this;
-
                 function a() {
                   that.message = "";
                   that.HideModal = true;
+                  localStorage.setItem("IndexUrl", 0);
                   that.$router.push({path: "/"})
                 }
-
                 setTimeout(a, 2000);
+
               }
-              else if (res.data === "2") {
-                this.message = "该用户没有注册";
+              else if (res.data.state === "-1") {
+                this.message =res.data.message;
+                this.HideModal = false;
+                const that = this;
+
+                function c() {
+                  that.message = "";
+                  that.HideModal = true;
+                  that.password = '';
+                }
+
+                setTimeout(c, 2000);
+              }
+              else if (res.data.state === "2") {
+                this.message =res.data.message;
                 this.HideModal = false;
                 const that = this;
 
@@ -149,18 +186,19 @@
 
                 setTimeout(b, 2000);
               }
-              else if (res.data === "-1") {
-                this.message = "密码错误";
+              else {
+                this.message = "登录失败";
                 this.HideModal = false;
                 const that = this;
 
-                function c() {
+                function d() {
                   that.message = "";
                   that.HideModal = true;
+                  that.username = '';
                   that.password = '';
                 }
 
-                setTimeout(c, 2000);
+                setTimeout(d, 2000);
               }
             })
             .catch((err) => {
@@ -301,7 +339,7 @@
             height: 50px;
             color: #ffffff;
             font-size: @font-size-large;
-            border-radius: 5%;
+            border-radius: 10px;
 
           }
         ;

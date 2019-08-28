@@ -39,9 +39,9 @@
       return {
         img: '',
         messageData: [
-          {"icon": "iconfont icon-huanbao", "text": "环保指标", "count": "1", "id": "1", "url": ""},
-          {"icon": "iconfont icon-xiaoliangyuce", "text": "调度计划", "count": "1", "id": "2", "url": ""},
-          {"icon": "iconfont icon-shuju", "text": "经济指标", "count": "1", "id": "3", "url": ""},
+          {"icon": "iconfont icon-huanbao", "text": "环保指标", "count": "1", "id": "1", "url": "/environmentalProtectionIndicators"},
+          {"icon": "iconfont icon-xiaoliangyuce", "text": "调度计划", "count": "1", "id": "2", "url": "/schedulingPlanOnLine"},
+          {"icon": "iconfont icon-shuju", "text": "经济指标", "count": "1", "id": "3", "url": "/economicIndicators"},
           {"icon": "iconfont icon-peizhiguanli", "text": "机组启停", "count": "1", "id": "4", "url": ""},
           {"icon": "iconfont icon-shezhi", "text": "系统消息", "count": "1", "id": "5", "url": ""},
           {"icon": "iconfont icon-youjian", "text": "在线反馈", "count": "1", "id": "6", "url": "/messageList"}

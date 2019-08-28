@@ -19,7 +19,12 @@ import schedulingPlan from '../components/index/schedulingPlan/schedulingPlan'
 import dutyLog from '../components/index/dutyLog/dutyLog.vue'
 import unitStartStop from '../components/index/unitStartStop/unitStartStop.vue'
 import onlineFeedback from '../components/message/onlineFeedback'
+import economicIndicators from '../components/message/economicIndicators.vue'
 import messageList from '../components/message/messageList.vue'
+import environmentalProtectionIndicators from '../components/message/environmentalProtectionIndicators.vue'
+import schedulingPlanOnLine from '../components/message/schedulingPlan.vue'
+import jzStartStop from '../components/message/jzStartStop.vue'
+import systemMessage from '../components/message/systemMessage.vue'
 
 
 import LoadManagement from '../components/index/LoadManagement/LoadManagement'
@@ -65,6 +70,38 @@ export default new Router({
       name: 'messageList',
       component:messageList
     },
+    {
+      path: '/economicIndicators',
+      name: 'economicIndicators',
+      component:economicIndicators
+    },
+    {
+      path: '/environmentalProtectionIndicators',
+      name: 'environmentalProtectionIndicators',
+      component:environmentalProtectionIndicators
+    },
+    {
+      path: '/schedulingPlanOnLine',
+      name: 'schedulingPlan',
+      component:schedulingPlanOnLine
+    },
+    {
+      path: '/jzStartStop',
+      name: 'jzStartStop',
+      component:jzStartStop
+    },
+    {
+      path: '/systemMessage',
+      name: 'systemMessage',
+      component:systemMessage
+    },
+
+
+
+
+
+
+
 
 
     {

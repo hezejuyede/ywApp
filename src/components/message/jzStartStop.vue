@@ -6,7 +6,7 @@
     <div id="LxKf">
       <div class="LxKf-top">
         <i class="iconfont icon-xiangzuo" @click="backIndex"></i>
-        <span>经济指标</span>
+        <span>机组启停</span>
         <i class="iconfont icon-solid-person"></i>
       </div>
       <div class="LxKf-center">

@@ -82,14 +82,13 @@
 
     //获取天气预报的接口
     getWeatherForecasts(){
-      axios.get('https://www.tianqiapi.com/api/?version=v1&cityid=101270801')
+      axios.get('https://www.tianqiapi.com/api/?version=v1&cityid=101270801&appid=1001&appsecret=5566')
         .then((res) => {
+          console.log(res.data)
           if(res.data.data.length>0){
             this.minTemperature = res.data.data[0].tem2;
             this.maxTemperature = res.data.data[0].tem1;
             this.weather = res.data.data[0].wea;
-
-
           }
           else {
             this.$message.warning( "暂无天气预报的数据");

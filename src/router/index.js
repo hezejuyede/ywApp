@@ -28,7 +28,7 @@ import systemMessage from '../components/message/systemMessage.vue'
 
 
 import LoadManagement from '../components/index/LoadManagement/LoadManagement'
-import EconomicIndicators from '../components/index/EconomicIndicators'
+import EconomicIndicatorsIndex from '../components/index/EconomicIndicators'
 import EnvironmentalProtection from '../components/index/EconomicIndicators/EnvironmentalProtection'
 import DailyHourlyMean from '../components/index/DailyHourlyMean'
 import EarlyMeeting from '../components/index/EarlyMeeting'
@@ -191,9 +191,9 @@ export default new Router({
       component: LoadManagement
     },
     {
-      path: '/EconomicIndicators',
-      name:'EconomicIndicators',
-      component: EconomicIndicators
+      path: '/EconomicIndicatorsIndex',
+      name:'EconomicIndicatorsIndex',
+      component: EconomicIndicatorsIndex
     },
     {
       path: '/EnvironmentalProtection',

@@ -73,7 +73,7 @@
           {"icon": "iconfont icon-caozuorizhi", "text": "值长日志","url":"dutyLog"},
           {"icon": "iconfont icon-shujuqushi", "text": "生产早会" ,"url":"EarlyMeeting"},
           {"icon": "iconfont icon-yanjing", "text": "经济指标","url":"EnvironmentalProtection"},
-          {"icon": "iconfont icon-huanbao", "text": "环保指标","url":"EconomicIndicators"},
+          {"icon": "iconfont icon-huanbao", "text": "环保指标","url":"EconomicIndicatorsIndex"},
           {"icon": "iconfont icon-peizhiguanli", "text": "机组启停","url":"unitStartStop"},
           {"icon": "iconfont icon-xunjianrenyuan", "text": "现场巡查","url":"Patrol"},
           {"icon": "iconfont icon-kaiji", "text": "设备信息"},

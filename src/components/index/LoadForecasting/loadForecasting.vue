@@ -152,7 +152,7 @@
 
       //获取天气预报的接口
       getWeatherForecasts(){
-        axios.get('https://www.tianqiapi.com/api/?version=v1&cityid=101270801')
+        axios.get('https://www.tianqiapi.com/api/?version=v1&cityid=101270801&appid=1001&appsecret=5566')
           .then((res) => {
             if(res.data.data.length>0){
               this.weather=res.data.data;
